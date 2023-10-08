@@ -8,12 +8,15 @@ import { PhysicsComponent } from "./components/PhysicsComponent";
 import { EntityType } from "./constants";
 import { FallingRocksSystem } from "./systems/FallingRocksSystem";
 import { HealthComponent } from "./components/HealthComponent";
-import { SpriteComponent } from "./components/SpriteComponent";
-
-import playerIdleSprite from "../public/assets/knight/idle.png";
+import { AnimatedSpriteComponent } from "./components/AnimatedSpriteComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
 import { MovementComponent } from "./components/MovementComponent";
+import { PreRenderSystem } from "./systems/PreRenderSystem";
+import { Sprite } from "./gfx/AnimatedSprite";
+
+import playerIdleSprite from "../public/assets/knight/idle.png";
+import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
 
 const canvas = document.querySelector("canvas");
 
@@ -63,12 +66,24 @@ function main() {
 		player,
 		new PhysicsComponent({
 			entityType: EntityType.PLAYER,
-			position: new Vec2(5, 700),
-			shape: new Box(8, 18),
+			position: new Vec2(5, 600),
+			shape: new Box(10, 19),
 		}),
 	);
 	ecs.emplace(player, new MovementComponent());
 	ecs.emplace(player, new HealthComponent());
+	ecs.emplace(
+		player,
+		new AnimatedSpriteComponent(
+			new Sprite({
+				url: playerIdleSprite,
+				width: 120,
+				height: 80,
+				frames: 10,
+				center: Vec2(55, 61),
+			}),
+		),
+	);
 
 	rocks.forEach((rock, index) => {
 		ecs.emplace(
@@ -84,9 +99,15 @@ function main() {
 	game.player = player;
 
 	ecs.register(InputSystem(ecs, player));
+
 	ecs.register(MovementSystem(ecs));
 	ecs.register(FallingRocksSystem(ecs, player));
 	ecs.register(PhysicsSystem(ecs));
+
+	ecs.register(AnimateSpriteSystem(ecs));
+
+	ecs.register(PreRenderSystem());
+	ecs.register(RenderSystem(ecs));
 	ecs.register(DebugRenderSystem(ecs));
 
 	start(ecs);

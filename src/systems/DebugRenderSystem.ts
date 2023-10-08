@@ -1,7 +1,7 @@
 import { ECS, Entity, System } from "../ecs";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 
-const CORD_SIZE = 2;
+const CORD_SIZE = 1;
 
 export const DebugRenderSystem = (ecs: ECS): System => ({
 	query: {},
@@ -11,8 +11,6 @@ export const DebugRenderSystem = (ecs: ECS): System => ({
 		if (!canvas || !context) {
 			return;
 		}
-
-		context.clearRect(0, 0, canvas?.width, canvas?.height);
 
 		entities.forEach((entity) => {
 			const body = ecs?.get(entity, PhysicsComponent);
