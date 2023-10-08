@@ -1,18 +1,10 @@
-import { World } from "..";
-import { TransformComponent, VelocityComponent } from "../components";
-import { System } from "../ecs";
+import { ECS, Entity, System } from "../ecs";
+import { physicsWorld } from "../physics";
 
-export const PhysicsSystem = (world: World): System => ({
+export const PhysicsSystem = (ecs: ECS): System => ({
 	query: {},
-	handler(entities) {
-		entities.forEach((entity) => {
-			const velocity = world.ecs?.get(entity, VelocityComponent);
-			const transform = world.ecs?.get(entity, TransformComponent);
-
-			if (velocity && transform) {
-				transform.x += velocity.x;
-				transform.y += velocity.y;
-			}
-		});
+	handler(entities: Entity[]) {
+		// TODO: Handle catchup etc.
+		physicsWorld.step(1 / 60);
 	},
 });

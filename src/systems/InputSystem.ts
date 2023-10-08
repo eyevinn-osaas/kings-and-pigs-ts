@@ -1,6 +1,9 @@
-import { World } from "..";
-import { VelocityComponent } from "../components";
-import { Entity, System } from "../ecs";
+import { ECS, Entity, System } from "../ecs";
+import {
+	MovementComponent,
+	MovementDirection,
+} from "../components/MovementComponent";
+import { MovementState } from "../components/MovementComponent";
 
 const pressed = new Map<string, boolean>();
 
@@ -12,30 +15,24 @@ document.addEventListener("keyup", (evt) => {
 	pressed.set(evt.code, false);
 });
 
-export const InputSystem = (world: World): System => ({
+export const InputSystem = (ecs: ECS, player: Entity): System => ({
 	query: {
-		entities: world.player ? [world.player] : [],
+		entities: player ? [player] : [],
 	},
 	handler: ([player]: Entity[]) => {
-		const velocity = world.ecs?.get(player, VelocityComponent);
-		if (velocity) {
-			let x = 0,
-				y = 0;
+		const movement = ecs?.get(player, MovementComponent);
+		if (movement) {
+			if (pressed.get("ArrowLeft")) {
+				movement.direction = MovementDirection.LEFT;
+			} else if (pressed.get("ArrowRight")) {
+				movement.direction = MovementDirection.RIGHT;
+			} else {
+				movement.direction = MovementDirection.IDLE;
+			}
 
-			[
-				{ key: "ArrowUp", y: -1 },
-				{ key: "ArrowDown", y: 1 },
-				{ key: "ArrowLeft", x: -1 },
-				{ key: "ArrowRight", x: 1 },
-			].forEach((input) => {
-				if (pressed.get(input.key)) {
-					x += input.x || 0;
-					y += input.y || 0;
-				}
-			});
-
-			velocity.x = x;
-			velocity.y = y;
+			if (pressed.get("Space") && movement.state === MovementState.STANDING) {
+				movement.state = MovementState.JUMPING;
+			}
 		}
 	},
 });
