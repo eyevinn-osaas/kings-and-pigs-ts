@@ -1,4 +1,4 @@
-import { ECS, Entity, System } from "../ecs";
+import { ECS, Entity, System, SystemDefaults } from "../ecs";
 import {
 	MovementComponent,
 	MovementDirection,
@@ -16,6 +16,7 @@ document.addEventListener("keyup", (evt) => {
 });
 
 export const InputSystem = (ecs: ECS, player: Entity): System => ({
+	...SystemDefaults,
 	query: {
 		entities: player ? [player] : [],
 	},
@@ -30,7 +31,7 @@ export const InputSystem = (ecs: ECS, player: Entity): System => ({
 				movement.direction = MovementDirection.IDLE;
 			}
 
-			if (pressed.get("Space") && movement.state === MovementState.STANDING) {
+			if (pressed.get("Space") && [MovementState.IDLE, MovementState.RUNNING].includes(movement.state)) {
 				movement.state = MovementState.JUMPING;
 			}
 		}

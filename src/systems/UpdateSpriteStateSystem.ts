@@ -1,20 +1,17 @@
 import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
+import { MovementComponent } from "../components/MovementComponent";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 
-export const AnimateSpriteSystem = (ecs: ECS): System => ({
+export const UpdateSpriteStateSystem = (ecs: ECS): System => ({
 	...SystemDefaults,
-	lag: 0,
-	msPerTick: 1000 / 7.5,
 	query: {},
 	handler(entities: Entity[]) {
 		entities.forEach((entity) => {
 			const sprite = ecs?.get(entity, AnimatedSpriteComponent);
+			const movement = ecs?.get(entity, MovementComponent);
 
-			if (sprite) {
-				sprite.frameIndex += 1;
-				if (sprite.frameIndex > sprite.totalFrames) {
-					sprite.frameIndex = 0;
-				}
+			if (sprite && movement && sprite.state !== movement.state) {
+				sprite.state = movement.state;
 			}
 		});
 	},

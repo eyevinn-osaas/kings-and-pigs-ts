@@ -1,9 +1,10 @@
-import { ECS, Entity, System } from "../ecs";
+import { ECS, Entity, System, SystemDefaults } from "../ecs";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 
 const CORD_SIZE = 1;
 
 export const DebugRenderSystem = (ecs: ECS): System => ({
+	...SystemDefaults,
 	query: {},
 	handler: (entities: Entity[]) => {
 		const canvas = document.querySelector<HTMLCanvasElement>("canvas");

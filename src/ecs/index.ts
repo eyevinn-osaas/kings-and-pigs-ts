@@ -1,10 +1,15 @@
 export type Entity = string;
 
 export abstract class Component {
-	public abstract destroy();
+	public enabled = true;
+	public abstract destroy(): void;
 }
 
+export const ALWAYS_TICK = -1;
+
 export interface System {
+	lag: 0;
+	msPerTick: number;
 	query: {
 		// TODO: implement a way to select which components are of interest for the system
 		// types?: string[],
@@ -13,12 +18,19 @@ export interface System {
 	handler: (entities: Entity[]) => void;
 }
 
+export const SystemDefaults: Omit<System, "handler" | "query"> = {
+	lag: 0,
+	msPerTick: ALWAYS_TICK,
+};
+
 type ComponentClass<T extends Component> = new (...args: any[]) => T;
 
 export function init() {
 	const registry: Entity[] = [];
 	const components: Map<Entity, Map<Function, Component>> = new Map();
 	const systems: System[] = [];
+
+	let lastTime = 0;
 	return {
 		create: () => {
 			const entity: Entity = crypto.randomUUID();
@@ -53,14 +65,21 @@ export function init() {
 		) {
 			return components.get(entity)?.get(componentClass) as T | undefined;
 		},
-		tick() {
+		tick(time: number) {
+			let delta = time - lastTime;
+			lastTime = time;
 			// TODO: implement three different ticks, input, update, and render that run at different times.
 			// eg. input always runs, update sometimes runs, and render always runs but provides a time to the render system to adjust for lag.
-			systems.forEach(({ query, handler }) => {
-				if (query.entities) {
-					handler(query.entities);
+			systems.forEach((system) => {
+				if (system.msPerTick === ALWAYS_TICK) {
+					system.handler(system.query.entities || registry);
 				} else {
-					handler(registry);
+					system.lag += delta;
+
+					while (system.lag >= system.msPerTick) {
+						system.handler(system.query.entities || registry);
+						system.lag -= system.msPerTick;
+					}
 				}
 			});
 		},
