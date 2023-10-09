@@ -1,8 +1,9 @@
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
-import { ECS, Entity, System } from "../ecs";
+import { ECS, Entity, System, SystemDefaults } from "../ecs";
 
 export const RenderSystem = (ecs: ECS): System => ({
+	...SystemDefaults,
 	query: {},
 	handler: (entities: Entity[]) => {
 		const canvas = document.querySelector<HTMLCanvasElement>("canvas");
@@ -28,7 +29,7 @@ export const RenderSystem = (ecs: ECS): System => ({
 					sprite.height,
 					x-cx,
 					y-cy,
-					sprite.width,
+					sprite.width, 
 					sprite.height
 				);
 			}

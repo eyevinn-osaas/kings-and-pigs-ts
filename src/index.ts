@@ -11,12 +11,16 @@ import { HealthComponent } from "./components/HealthComponent";
 import { AnimatedSpriteComponent } from "./components/AnimatedSpriteComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
-import { MovementComponent } from "./components/MovementComponent";
+import { MovementComponent, MovementState } from "./components/MovementComponent";
 import { PreRenderSystem } from "./systems/PreRenderSystem";
 import { Sprite } from "./gfx/AnimatedSprite";
+import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
+import { UpdateSpriteStateSystem } from "./systems/UpdateSpriteStateSystem";
 
 import playerIdleSprite from "../public/assets/knight/idle.png";
-import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
+import playerRunSprite from "../public/assets/knight/run.png";
+import playerJumpSprite from "../public/assets/knight/jump.png";
+import playerFallSprite from "../public/assets/knight/fall.png";
 
 const canvas = document.querySelector("canvas");
 
@@ -39,12 +43,12 @@ const game: Game = {
 };
 
 function start(ecs: ECS) {
-	const loop = () => {
+	const loop = (time: number) => {
 		if (!game.player) {
 			return;
 		}
 
-		ecs?.tick();
+		ecs?.tick(time);
 
 		const playerHealth = ecs.get(game.player, HealthComponent);
 		if (playerHealth && playerHealth.health > 0) {
@@ -62,6 +66,38 @@ function main() {
 	const player = ecs.create();
 	const rocks = new Array(20).fill(undefined).map(() => ecs.create());
 
+	const idleSprite = new Sprite({
+		url: playerIdleSprite,
+		width: 120,
+		height: 80,
+		frames: 10,
+		center: Vec2(55, 61),
+	});
+
+	const runSprite = new Sprite({
+		url: playerRunSprite,
+		width: 120,
+		height: 80,
+		frames: 10,
+		center: Vec2(55, 61),
+	});
+
+	const jumpSprite = new Sprite({
+		url: playerJumpSprite,
+		width: 120,
+		height: 80,
+		frames: 3,
+		center: Vec2(55, 61),
+	});
+
+	const fallSprite = new Sprite({
+		url: playerFallSprite,
+		width: 120,
+		height: 80,
+		frames: 3,
+		center: Vec2(55, 61),
+	});
+
 	ecs.emplace(
 		player,
 		new PhysicsComponent({
@@ -72,18 +108,12 @@ function main() {
 	);
 	ecs.emplace(player, new MovementComponent());
 	ecs.emplace(player, new HealthComponent());
-	ecs.emplace(
-		player,
-		new AnimatedSpriteComponent(
-			new Sprite({
-				url: playerIdleSprite,
-				width: 120,
-				height: 80,
-				frames: 10,
-				center: Vec2(55, 61),
-			}),
-		),
-	);
+	ecs.emplace(player, new AnimatedSpriteComponent({
+		[MovementState.IDLE]: idleSprite,
+		[MovementState.RUNNING]: runSprite,
+		[MovementState.FALLING]: fallSprite,
+		[MovementState.JUMPING]: jumpSprite,
+	}));
 
 	rocks.forEach((rock, index) => {
 		ecs.emplace(
@@ -101,6 +131,7 @@ function main() {
 	ecs.register(InputSystem(ecs, player));
 
 	ecs.register(MovementSystem(ecs));
+	ecs.register(UpdateSpriteStateSystem(ecs));
 	ecs.register(FallingRocksSystem(ecs, player));
 	ecs.register(PhysicsSystem(ecs));
 

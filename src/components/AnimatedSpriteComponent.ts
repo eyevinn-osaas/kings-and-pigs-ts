@@ -1,29 +1,54 @@
 import { Vec2 } from "planck";
 import { Sprite } from "../gfx/AnimatedSprite";
+import { Component } from "../ecs";
+import { MovementState } from "./MovementComponent";
 
-export class AnimatedSpriteComponent {
+type MovementSpriteMap = {
+	[key in MovementState]: Sprite;
+};
+
+export class AnimatedSpriteComponent extends Component {
+	private _state: MovementState = MovementState.IDLE;
+	private spriteMap: MovementSpriteMap;
+
 	public frameIndex = 0;
 
-	constructor(private sprite: Sprite) {}
+	constructor(spriteMap: MovementSpriteMap) {
+		super();
+		this.spriteMap = spriteMap;
+	}
+
+	get activeSprite() {
+		return this.spriteMap[this._state];
+	}
+
+	get state() {
+		return this._state;
+	}
+
+	set state(state: MovementState) {
+		this._state = state;
+		this.frameIndex = 0;
+	}
 
 	get spriteSheet() {
-		return this.sprite.spriteSheet;
+		return this.activeSprite.spriteSheet;
 	}
 
 	get width() {
-		return this.sprite.width;
+		return this.activeSprite.width;
 	}
 
 	get height() {
-		return this.sprite.height;
+		return this.activeSprite.height;
 	}
 
 	get center() {
-		return this.sprite.center;
+		return this.activeSprite.center;
 	}
 
 	get totalFrames() {
-		return this.sprite.frames - 1;
+		return this.activeSprite.frames - 1;
 	}
 
 	get position() {

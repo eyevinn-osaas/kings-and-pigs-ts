@@ -1,9 +1,10 @@
-import { System } from "../ecs";
+import { System, SystemDefaults } from "../ecs";
 
 /**
  *  Prepares the canvas for the next animation frame
  */
 export const PreRenderSystem = (): System => ({
+	...SystemDefaults,
 	query: {},
 	handler: () => {
 		const canvas = document.querySelector<HTMLCanvasElement>("canvas");

@@ -7,13 +7,14 @@ export enum MovementDirection {
 }
 
 export enum MovementState {
-	STANDING = "standing",
+	IDLE = "idle",
+	RUNNING = "running",
 	FALLING = "falling",
 	JUMPING = "jumping",
 }
 
 export class MovementComponent extends Component {
-	public state: MovementState = MovementState.STANDING;
+	public state: MovementState = MovementState.IDLE;
 	public direction: MovementDirection = MovementDirection.RIGHT;
 
 	constructor() {
