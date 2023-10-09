@@ -4,7 +4,7 @@ import { ECS, Entity, System, SystemDefaults } from "../ecs";
 export const AnimateSpriteSystem = (ecs: ECS): System => ({
 	...SystemDefaults,
 	lag: 0,
-	msPerTick: 1000 / 7.5,
+	msPerTick: 1000 / 15,
 	query: {},
 	handler(entities: Entity[]) {
 		entities.forEach((entity) => {

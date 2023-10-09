@@ -21,10 +21,10 @@ export const MovementSystem = (ecs: ECS): System => ({
 
 				switch (movement.direction) {
 					case MovementDirection.LEFT:
-						velocity.x = -50;
+						velocity.x = -75;
 						break;
 					case MovementDirection.RIGHT:
-						velocity.x = 50;
+						velocity.x = 75;
 						break;
 					case MovementDirection.IDLE:
 						velocity.x = 0; // TODO: apply some force/impulse instead? configure friction?
