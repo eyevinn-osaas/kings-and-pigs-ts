@@ -15,6 +15,19 @@ document.addEventListener("keyup", (evt) => {
 	pressed.set(evt.code, false);
 });
 
+const touchLeftEl = document.querySelector(".touch .left");
+touchLeftEl?.addEventListener('pointerdown', () => pressed.set('ArrowLeft', true))
+touchLeftEl?.addEventListener('pointerup', () => pressed.set('ArrowLeft', false))
+
+const touchRightEl = document.querySelector(".touch .right");
+touchRightEl?.addEventListener('pointerdown', () => pressed.set('ArrowRight', true))
+touchRightEl?.addEventListener('pointerup', () => pressed.set('ArrowRight', false))
+
+const touchJumpEl = document.querySelector(".touch .jump");
+touchJumpEl?.addEventListener('pointerdown', () => pressed.set('Space', true))
+touchJumpEl?.addEventListener('pointerup', () => pressed.set('Space', false))
+
+
 export const InputSystem = (ecs: ECS, player: Entity): System => ({
 	...SystemDefaults,
 	query: {
@@ -23,16 +36,20 @@ export const InputSystem = (ecs: ECS, player: Entity): System => ({
 	handler: ([player]: Entity[]) => {
 		const movement = ecs?.get(player, MovementComponent);
 		if (movement) {
-			if ([MovementState.IDLE, MovementState.RUNNING].includes(movement.state)) {
-				if (pressed.get("ArrowLeft")) {
-					movement.state = MovementState.RUNNING;
-					movement.direction = MovementDirection.LEFT;
-				} else if (pressed.get("ArrowRight")) {
-					movement.state = MovementState.RUNNING;
-					movement.direction = MovementDirection.RIGHT;
-				} else {
-					movement.state = MovementState.IDLE;
-				}
+			if (pressed.get("ArrowLeft")) {
+				movement.state =
+					movement.state === MovementState.IDLE
+						? MovementState.RUNNING
+						: movement.state;
+				movement.direction = MovementDirection.LEFT;
+			} else if (pressed.get("ArrowRight")) {
+				movement.state =
+					movement.state === MovementState.IDLE
+						? MovementState.RUNNING
+						: movement.state;
+				movement.direction = MovementDirection.RIGHT;
+			} else {
+				movement.state = MovementState.IDLE;
 			}
 
 			if (

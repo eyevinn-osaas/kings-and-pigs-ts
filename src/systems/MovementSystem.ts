@@ -31,6 +31,11 @@ export const MovementSystem = (ecs: ECS): System => ({
 
 					physics.velocity = velocity;
 				}
+				if (movement.state === MovementState.IDLE) {
+					// Stop the entity by setting the velocity to 0
+					velocity.x = 0;
+					physics.velocity = velocity;
+				}
 
 				// if jumping and y velocity is 0 ( not jumping or falling ) apply impulse to make the body "jump"
 				if (movement.state === MovementState.JUMPING && velocity.y === 0) {
