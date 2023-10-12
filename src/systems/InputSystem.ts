@@ -23,15 +23,22 @@ export const InputSystem = (ecs: ECS, player: Entity): System => ({
 	handler: ([player]: Entity[]) => {
 		const movement = ecs?.get(player, MovementComponent);
 		if (movement) {
-			if (pressed.get("ArrowLeft")) {
-				movement.direction = MovementDirection.LEFT;
-			} else if (pressed.get("ArrowRight")) {
-				movement.direction = MovementDirection.RIGHT;
-			} else {
-				movement.direction = MovementDirection.IDLE;
+			if ([MovementState.IDLE, MovementState.RUNNING].includes(movement.state)) {
+				if (pressed.get("ArrowLeft")) {
+					movement.state = MovementState.RUNNING;
+					movement.direction = MovementDirection.LEFT;
+				} else if (pressed.get("ArrowRight")) {
+					movement.state = MovementState.RUNNING;
+					movement.direction = MovementDirection.RIGHT;
+				} else {
+					movement.state = MovementState.IDLE;
+				}
 			}
 
-			if (pressed.get("Space") && [MovementState.IDLE, MovementState.RUNNING].includes(movement.state)) {
+			if (
+				pressed.get("Space") &&
+				[MovementState.IDLE, MovementState.RUNNING].includes(movement.state)
+			) {
 				movement.state = MovementState.JUMPING;
 			}
 		}

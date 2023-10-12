@@ -16,21 +16,21 @@ export const MovementSystem = (ecs: ECS): System => ({
 			const physics = ecs?.get(entity, PhysicsComponent);
 
 			if (movement && physics) {
-				// Move the entity in the desired direction by updating the velocity
 				const velocity = physics.velocity.clone();
+				if (movement.state === MovementState.RUNNING) {
+					// Move the entity in the desired direction by updating the velocity
 
-				switch (movement.direction) {
-					case MovementDirection.LEFT:
-						velocity.x = -75;
-						break;
-					case MovementDirection.RIGHT:
-						velocity.x = 75;
-						break;
-					case MovementDirection.IDLE:
-						velocity.x = 0; // TODO: apply some force/impulse instead? configure friction?
+					switch (movement.direction) {
+						case MovementDirection.LEFT:
+							velocity.x = -75;
+							break;
+						case MovementDirection.RIGHT:
+							velocity.x = 75;
+							break;
+					}
+
+					physics.velocity = velocity;
 				}
-
-				physics.velocity = velocity;
 
 				// if jumping and y velocity is 0 ( not jumping or falling ) apply impulse to make the body "jump"
 				if (movement.state === MovementState.JUMPING && velocity.y === 0) {
@@ -40,22 +40,13 @@ export const MovementSystem = (ecs: ECS): System => ({
 					);
 				}
 
-				console.log(velocity.y)
-
 				// check the velocity and determine the state of the movement
 				if (velocity.y < 0) {
 					// movement.state = MovementState.JUMPING;
 				} else if (velocity.y > 0) {
 					movement.state = MovementState.FALLING;
 				} else if (velocity.y === 0) {
-					if (
-						MovementDirection.RIGHT === movement.direction ||
-						MovementDirection.LEFT === movement.direction
-					) {
-						movement.state = MovementState.RUNNING;
-					} else {
-						movement.state = MovementState.IDLE;
-					}
+					movement.state = MovementState.IDLE;
 				}
 			}
 		});
