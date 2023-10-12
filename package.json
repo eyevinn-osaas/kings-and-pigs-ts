@@ -2,7 +2,6 @@
   "name": "dungeon-survival-ts",
   "version": "1.0.0",
   "description": "A simple dungeon survival game. Run and jump between falling rocks, how long can you survive?",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "parcel build public/index.html",
