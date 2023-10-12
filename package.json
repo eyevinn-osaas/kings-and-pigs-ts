@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build public/index.html",
     "start": "parcel public/index.html"
   },
   "author": "Benjamin Wallberg <me@bwallberg.com>",

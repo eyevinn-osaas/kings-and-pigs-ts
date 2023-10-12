@@ -9,6 +9,7 @@ type MovementSpriteMap = {
 
 export class AnimatedSpriteComponent extends Component {
 	private _state: MovementState = MovementState.IDLE;
+	private _flip: boolean = false;
 	private spriteMap: MovementSpriteMap;
 
 	public frameIndex = 0;
@@ -29,6 +30,14 @@ export class AnimatedSpriteComponent extends Component {
 	set state(state: MovementState) {
 		this._state = state;
 		this.frameIndex = 0;
+	}
+
+	get flip() {
+		return this._flip;
+	}
+
+	set flip(flip) {
+		this._flip = flip
 	}
 
 	get spriteSheet() {

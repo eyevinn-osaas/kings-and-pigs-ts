@@ -128,9 +128,10 @@ function main() {
 
 	game.player = player;
 
-	ecs.register(InputSystem(ecs, player));
 
 	ecs.register(MovementSystem(ecs));
+	ecs.register(InputSystem(ecs, player));
+
 	ecs.register(UpdateSpriteStateSystem(ecs));
 	ecs.register(FallingRocksSystem(ecs, player));
 	ecs.register(PhysicsSystem(ecs));

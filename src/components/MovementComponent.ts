@@ -1,7 +1,6 @@
 import { Component } from "../ecs";
 
 export enum MovementDirection {
-	IDLE = "idle",
 	RIGHT = "right",
 	LEFT = "left",
 }
