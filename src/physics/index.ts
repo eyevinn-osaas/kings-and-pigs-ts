@@ -4,7 +4,7 @@ import { EntityType } from "../constants";
 Settings.lengthUnitsPerMeter = 10;
 
 export const physicsWorld = new World({
-	gravity: new Vec2(0, 9.8*3),
+	gravity: new Vec2(0, 9.8*8),
 });
 
 // TODO: Should these also be entities? 

@@ -17,7 +17,7 @@ export const MovementSystem = (ecs: ECS): System => ({
 
 			if (movement && physics) {
 				const velocity = physics.velocity.clone();
-				if (movement.state === MovementState.RUNNING) {
+				if (movement.state !== MovementState.IDLE) {
 					// Move the entity in the desired direction by updating the velocity
 
 					switch (movement.direction) {
@@ -40,7 +40,7 @@ export const MovementSystem = (ecs: ECS): System => ({
 				// if jumping and y velocity is 0 ( not jumping or falling ) apply impulse to make the body "jump"
 				if (movement.state === MovementState.JUMPING && velocity.y === 0) {
 					physics.body.applyLinearImpulse(
-						new Vec2(0, -30),
+						new Vec2(0, -60),
 						physics.body.getWorldCenter(),
 					);
 				}
