@@ -2,7 +2,6 @@ import { ECS, Entity, init } from "./ecs";
 import { InputSystem } from "./systems/InputSystem";
 import { PhysicsSystem } from "./systems/PhysicsSystem";
 import { DebugRenderSystem } from "./systems/DebugRenderSystem";
-import { createWorldEdges } from "./physics";
 import { Box, Vec2 } from "planck";
 import { PhysicsComponent } from "./components/PhysicsComponent";
 import { EntityType } from "./constants";
@@ -11,7 +10,10 @@ import { HealthComponent } from "./components/HealthComponent";
 import { AnimatedSpriteComponent } from "./components/AnimatedSpriteComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
-import { MovementComponent, MovementState } from "./components/MovementComponent";
+import {
+	MovementComponent,
+	MovementState,
+} from "./components/MovementComponent";
 import { PreRenderSystem } from "./systems/PreRenderSystem";
 import { Sprite } from "./gfx/AnimatedSprite";
 import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
@@ -22,11 +24,17 @@ import playerRunSprite from "../public/assets/knight/run.png";
 import playerJumpSprite from "../public/assets/knight/jump.png";
 import playerFallSprite from "../public/assets/knight/fall.png";
 
+import map from "../public/assets/world/map.json";
+
+console.log(map);
+
 const canvas = document.querySelector("canvas");
 
 if (!canvas) {
 	throw "[Dungeon Survival] No canvas found!";
 }
+
+canvas.style.backgroundColor = map.defaultLevelBgColor;
 
 // TODO: move this...
 export type Game = {
@@ -61,10 +69,22 @@ function start(ecs: ECS) {
 function main() {
 	const ecs = init();
 
-	createWorldEdges(game.width, game.height);
-
 	const player = ecs.create();
-	const rocks = new Array(20).fill(undefined).map(() => ecs.create());
+	const collisions = map.levels[0].layerInstances[0].autoLayerTiles.map(
+		(tile) => {
+			const entity = ecs.create();
+
+			ecs.emplace(
+				entity,
+				new PhysicsComponent({
+					entityType: "ground",
+					position: new Vec2(tile.px[0] + 8, tile.px[1] + 8),
+					bodyType: "static",
+					shape: new Box(8, 8),
+				}),
+			);
+		},
+	);
 
 	const idleSprite = new Sprite({
 		url: playerIdleSprite,
@@ -98,36 +118,29 @@ function main() {
 		center: Vec2(55, 61),
 	});
 
+	const playerPosition = map.levels[0].layerInstances[1].entityInstances[0].px;
+
 	ecs.emplace(
 		player,
 		new PhysicsComponent({
 			entityType: EntityType.PLAYER,
-			position: new Vec2(5, 600),
+			position: new Vec2(playerPosition[0], playerPosition[1]),
 			shape: new Box(10, 19),
 		}),
 	);
 	ecs.emplace(player, new MovementComponent());
 	ecs.emplace(player, new HealthComponent());
-	ecs.emplace(player, new AnimatedSpriteComponent({
-		[MovementState.IDLE]: idleSprite,
-		[MovementState.RUNNING]: runSprite,
-		[MovementState.FALLING]: fallSprite,
-		[MovementState.JUMPING]: jumpSprite,
-	}));
-
-	rocks.forEach((rock, index) => {
-		ecs.emplace(
-			rock,
-			new PhysicsComponent({
-				entityType: EntityType.FALLING_ROCK,
-				position: new Vec2(200 + index * 5, 5),
-				shape: new Box(5, 5),
-			}),
-		);
-	});
+	ecs.emplace(
+		player,
+		new AnimatedSpriteComponent({
+			[MovementState.IDLE]: idleSprite,
+			[MovementState.RUNNING]: runSprite,
+			[MovementState.FALLING]: fallSprite,
+			[MovementState.JUMPING]: jumpSprite,
+		}),
+	);
 
 	game.player = player;
-
 
 	ecs.register(MovementSystem(ecs));
 	ecs.register(InputSystem(ecs, player));
