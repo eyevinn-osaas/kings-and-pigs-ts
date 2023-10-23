@@ -2,11 +2,11 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 
-import world from "../../public/assets/world/map/png/level_0.png";
-import { getPolygonWidthHeight } from "../physics";
+import level from "../../public/assets/levels/main/simplified/Level_0/_composite.png";
 
-const test = new Image();
-test.src = world;
+// TODO: move this...
+const levelComposite = new Image();
+levelComposite.src = level;
 
 export const RenderSystem = (ecs: ECS): System => ({
 	...SystemDefaults,
@@ -18,7 +18,7 @@ export const RenderSystem = (ecs: ECS): System => ({
 			return;
 		}
 
-		context.drawImage(test, 0, 0, canvas.width, canvas.height);
+		context.drawImage(levelComposite, 0, 0, canvas.width, canvas.height);
 
 		entities.forEach((entity) => {
 			const body = ecs?.get(entity, PhysicsComponent);

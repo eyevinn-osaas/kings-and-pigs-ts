@@ -1,0 +1,68 @@
+{
+	"identifier": "Level_0",
+	"uniqueIdentifer": "3e1dcd50-6280-11ee-862e-4f47d61c1814",
+	"x": 0,
+	"y": 0,
+	"width": 640,
+	"height": 352,
+	"bgColor": "#3F3851",
+	"neighbourLevels": [],
+	"customFields" : {},
+	"layers": [
+		"Background.png",
+		"Decorations.png",
+		"Terrain.png"
+	],
+	"entities": {
+		"Enemy": [
+			{
+				"id": "Enemy",
+				"iid": "672803c0-6280-11ee-862e-bd3657aa2cda",
+				"layer": "Entities",
+				"x": 624,
+				"y": 112,
+				"width": 28,
+				"height": 28,
+				"color": 14120515,
+				"customFields" : {}
+			},
+			{
+				"id": "Enemy",
+				"iid": "6c021480-6280-11ee-862e-0b7266971c32",
+				"layer": "Entities",
+				"x": 16,
+				"y": 112,
+				"width": 28,
+				"height": 28,
+				"color": 14120515,
+				"customFields" : {}
+			}
+		],
+		"Door": [
+			{
+				"id": "Door",
+				"iid": "0cfeb230-6280-11ee-862e-bda0567f87a7",
+				"layer": "Entities",
+				"x": 304,
+				"y": 288,
+				"width": 46,
+				"height": 56,
+				"color": 14984818,
+				"customFields" : {}
+			}
+		],
+		"Player": [
+			{
+				"id": "Player",
+				"iid": "1e68acd0-6280-11ee-862e-d933d0fa09ba",
+				"layer": "Entities",
+				"x": 304,
+				"y": 272,
+				"width": 58,
+				"height": 58,
+				"color": 12470831,
+				"customFields" : {}
+			}
+		]
+	}
+}
