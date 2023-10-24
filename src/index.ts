@@ -10,6 +10,7 @@ import { HealthComponent } from "./components/HealthComponent";
 import { AnimatedSpriteComponent } from "./components/AnimatedSpriteComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
+import { ActionComponent } from "./components/ActionComponent";
 import {
 	MovementComponent,
 	MovementState,
@@ -19,7 +20,7 @@ import { Sprite } from "./gfx/AnimatedSprite";
 import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
 import { UpdateSpriteStateSystem } from "./systems/UpdateSpriteStateSystem";
 
-import playerIdleSprite from "../public/assets/sprites/01-king_human/idle_(78x58).png
+import playerIdleSprite from "../public/assets/sprites/01-king_human/idle_(78x58).png";
 import playerRunSprite from "../public/assets/sprites/01-king_human/run_(78x58).png";
 import playerJumpSprite from "../public/assets/sprites/01-king_human/jump_(78x58).png";
 import playerFallSprite from "../public/assets/sprites/01-king_human/fall_(78x58).png";
@@ -71,15 +72,14 @@ function main() {
 
 	document.body.style.backgroundColor = level.bgColor;
 
-	const player = ecs.create();
-	const collisions = level.layerInstances[1].autoLayerTiles.map(
+	level.layerInstances[1].autoLayerTiles.forEach(
 		(tile: any) => {
 			const entity = ecs.create();
 
 			ecs.emplace(
 				entity,
 				new PhysicsComponent({
-					entityType: "ground",
+					entityType: "terrain",
 					position: new Vec2(tile.px[0] + 16, tile.px[1] + 16),
 					bodyType: "static",
 					shape: new Box(16, 16),
@@ -122,14 +122,17 @@ function main() {
 
 	const playerPosition = level.layerInstances[0].entityInstances[3].px;
 
+	const player = ecs.create();
 	ecs.emplace(
 		player,
 		new PhysicsComponent({
 			entityType: EntityType.PLAYER,
 			position: new Vec2(playerPosition[0], playerPosition[1]),
 			shape: new Box(11.5, 14),
+			fixtureOpt: { friction: 0 }
 		}),
 	);
+	ecs.emplace(player, new ActionComponent());
 	ecs.emplace(player, new MovementComponent());
 	ecs.emplace(player, new HealthComponent());
 	ecs.emplace(
@@ -144,8 +147,8 @@ function main() {
 
 	game.player = player;
 
-	ecs.register(MovementSystem(ecs));
 	ecs.register(InputSystem(ecs, player));
+	ecs.register(MovementSystem(ecs));
 
 	ecs.register(UpdateSpriteStateSystem(ecs));
 	ecs.register(FallingRocksSystem(ecs, player));
