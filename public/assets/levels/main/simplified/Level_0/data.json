@@ -24,7 +24,9 @@
 				"width": 28,
 				"height": 28,
 				"color": 14120515,
-				"customFields" : {}
+				"customFields": {
+					"Direction": "Left"
+				}
 			},
 			{
 				"id": "Enemy",
@@ -35,7 +37,9 @@
 				"width": 28,
 				"height": 28,
 				"color": 14120515,
-				"customFields" : {}
+				"customFields": {
+					"Direction": "Right"
+				}
 			}
 		],
 		"Door": [

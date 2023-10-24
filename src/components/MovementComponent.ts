@@ -40,9 +40,8 @@ export function requestState(current: MovementState, target: MovementState): Mov
 
 export class MovementComponent extends Component {
 	public state: MovementState = MovementState.IDLE;
-	public direction: MovementDirection = MovementDirection.RIGHT;
 
-	constructor() {
+	constructor(public direction: MovementDirection = MovementDirection.RIGHT) {
 		super();
 	}
 	public destroy() {}

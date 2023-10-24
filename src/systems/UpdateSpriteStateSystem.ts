@@ -17,12 +17,9 @@ export const UpdateSpriteStateSystem = (ecs: ECS): System => ({
 				if (sprite.state !== movement.state) {
 					sprite.state = movement.state;
 				}
-				if (movement.direction === MovementDirection.LEFT && !sprite.flip) {
+				if (movement.direction === MovementDirection.LEFT) {
 					sprite.flip = true;
-				} else if (
-					movement.direction === MovementDirection.RIGHT &&
-					sprite.flip
-				) {
+				} else if (movement.direction === MovementDirection.RIGHT) {
 					sprite.flip = false;
 				}
 			}

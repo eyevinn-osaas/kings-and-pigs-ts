@@ -6,6 +6,12 @@ type SpriteOpts = {
 	height: number;
 	center: Vec2;
 	frames: number;
+
+	/**
+	 * By default the system assumes the sprites face the right direction, if the sprite
+	 * doesn't set this to true to fix its default orientation 
+	 */
+	flip?: boolean;
 };
 
 export class Sprite {
@@ -16,7 +22,9 @@ export class Sprite {
 	public center: Vec2;
 	public frames: number;
 
-	constructor({ url, width, height, center, frames }: SpriteOpts) {
+	public flip: boolean;
+
+	constructor({ url, width, height, center, frames, flip = false }: SpriteOpts) {
 		this.spriteSheet = new Image();
 		this.spriteSheet.src = url;
 
@@ -24,5 +32,7 @@ export class Sprite {
 		this.height = height;
 		this.center = center;
 		this.frames = frames;
+
+		this.flip = flip;
 	}
 }

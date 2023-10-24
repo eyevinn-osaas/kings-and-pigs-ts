@@ -11,7 +11,7 @@
 	"iid": "3e1d5820-6280-11ee-862e-a1d25684a23a",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 111,
+	"nextUid": 113,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -22,8 +22,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 32,
-	"defaultEntityWidth": null,
-	"defaultEntityHeight": null,
+	"defaultEntityWidth": 16,
+	"defaultEntityHeight": 16,
 	"bgColor": "#40465B",
 	"defaultLevelBgColor": "#696A79",
 	"minifyJson": false,
@@ -3114,7 +3114,46 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 0.5,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "Direction",
+					"doc": null,
+					"__type": "LocalEnum.Direction",
+					"uid": 112,
+					"type": "F_Enum(111)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": {
+						"id": "V_String",
+						"params": ["Left"]
+					},
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		},
 		{
 			"identifier": "Enemy_King",
@@ -3122,8 +3161,8 @@
 			"tags": [],
 			"exportToToc": false,
 			"doc": null,
-			"width": null,
-			"height": null,
+			"width": 16,
+			"height": 16,
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -3342,7 +3381,7 @@
 				"averageColors": "0000000000004656ba88f977fb98fb98fba9fbaafb98f977fb98fba9fba9fbaafb98f977ba88465600000000000000000000ba77fdbaffcafb98ffcaffcaffcaffcaffcafb98ffcaffcaffcaffcaffcafb98ffcafdbaba77000000000000ba77ffcbffcafeb9fb77fea9fea9fea9fea9fea9fb77fea9fea9fea9fea9fea9fb77feb9ffcaffcbba7700004656fda9ffcafea9fc78f866f867f867f867f867f756f667f656f867f867f867f867f866fc78fea9ffcafda94656ba77ffcaffbafc78f656f756f867f867f867f867f866f667f656f867f867f867f867f756f656fc78ffbaffcaba77fb98ffcafea9f967f967fa77fb88fb88fb88fb78f867f667f656f967f977f977f977f977f867f967fea9ffcafb98f977fb98fb77f656f867f977f977f977f977f977f866f667f656f977f977f977f977f977f867f656fb77fb98f977fb98ffcafea9f667f667fa78fb98fb98fb98fb98fb88f667f977fb98fb98fb98fb98fa78f667f667fea9ffcafb98fbaaffcafea9f767f778fa78fb98fb98fb98fb98fb98f778f977fb98fb98fb98fb98fa78f778f767fea9ffcafbaafba9ffcafea9f866f977f977f977f977f977f977f977f788f866f977f977f977f977f977f977f866fea9ffcafba9fb98ffcafea9f756f867f867f867f867f867f867f867f778f977fb98fb98fb98fb98fb98fb98f977fea9ffcafb98fb98ffcafea9f867fa77fa77fa77fa77fa77fa77fa67f778f977fb98fb98fb98fb98fb98fb98f977fea9ffcafb98f977fb98fb77f866f977f977f977f977f977f977f977f667f866f977f977f977f977f977f977f866fb77fb98f977fba9ffcafea9f977fb98fb98fb98fb98fb98fb98fa78f667f867fb88fb98fb98fb98fb98fb98f977fea9ffcafba9fba9ffcafea9f866f977f977f977f977f977f977f778f788f89af866f977f977f977f977f977f866fea9ffcafba9fba9ffcafea9f656f867f867f867f867f867f867f778f788f799f977fb98fb98fb98fb98fb98f977fea9ffcafba9fb98ffcafea9f656fa67fa77fa77fa77fa77fa67f778f788f799f977fb98fb98fb98fb98fb98f977fea9ffcafb98f977fb98fb77f866f977f977f977f977f977f977f778f788f799f656f656f656f656f656f656f656fb77fb98f977fb98ffcafea9f977fb98fb98fb98fb98fb98fb98f778f788f799f867fa77fa77fa77fa77fa67f656fea9ffcafb98fbaaffcafea9f866f977f977f977f977f977f977f778f788f799f756f867f867f867f867f867f656fea9ffcafbaafba9ffcafea9f866f977fb88fb98fb98fb98fb88f767f778f778fa77fb98fb98fb98fb88f977f867fea9ffcafba9fb98ffcafea9f667f789f977fb98fb98fb98fb98fb88f667f977fb98fb98fb98fb98f977f789f667fea9ffcafb98fb98ffcafea9f656f656f977f977f977f977f977f977f778f867f977f977f977f977f977f656f656fea9ffcafb98f977fb98fb77f867fa77fa77fa77fa77fa77fa77f867f667f977fb98fb98fb98fb98fb98fb98f977fb77fb98f977fba9ffcafea9f756f867f867f867f867f867f867f756f667f977fb98fb98fb98fb98fb98fb98f977fea9ffcafba9fba9ffcafea9f866f977f977f977f977f977f977f977f667f656f656f656f656f656f656f656f656fea9ffcafba9fb77fea9fd88f977fb98fb98fb98fb98fb98fb98fb88f667f656fa67fa77fa77fa77fa77fa67f656fd88fea9fb77f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656f656"
 			}
 		}
-	], "enums": [], "externalEnums": [], "levelFields": [] },
+	], "enums": [{ "identifier": "Direction", "uid": 111, "values": [ { "id": "Left", "tileRect": null, "color": 12470831 }, { "id": "Right", "tileRect": null, "color": 14120515 } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -3403,7 +3442,7 @@
 							"height": 28,
 							"defUid": 6,
 							"px": [624,112],
-							"fieldInstances": []
+							"fieldInstances": [{ "__identifier": "Direction", "__type": "LocalEnum.Direction", "__value": "Left", "__tile": null, "defUid": 112, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Enemy",
@@ -3419,7 +3458,10 @@
 							"height": 28,
 							"defUid": 6,
 							"px": [16,112],
-							"fieldInstances": []
+							"fieldInstances": [{ "__identifier": "Direction", "__type": "LocalEnum.Direction", "__value": "Right", "__tile": null, "defUid": 112, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Right"]
+							}] }]
 						},
 						{
 							"__identifier": "Door",

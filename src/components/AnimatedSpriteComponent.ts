@@ -33,7 +33,7 @@ export class AnimatedSpriteComponent extends Component {
 	}
 
 	get flip() {
-		return this._flip;
+		return this.activeSprite.flip ? !this._flip : this._flip;
 	}
 
 	set flip(flip) {
