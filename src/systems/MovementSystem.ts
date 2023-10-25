@@ -26,12 +26,12 @@ export const MovementSystem = (ecs: ECS): System => ({
 						case Action.LEFT:
 							movement.direction = MovementDirection.LEFT;
 
-							velocity.x = -75;
+							velocity.x = Math.min(velocity.x - 10, -200);
 							break;
 						case Action.RIGHT:
 							movement.direction = MovementDirection.RIGHT;
 
-							velocity.x = 75;
+							velocity.x = Math.max(velocity.x + 10, 200);
 							physics.velocity = velocity;
 							break;
 						case Action.JUMP:
