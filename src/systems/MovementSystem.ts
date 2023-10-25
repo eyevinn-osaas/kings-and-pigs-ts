@@ -38,7 +38,7 @@ export const MovementSystem = (ecs: ECS): System => ({
 							// if jumping and y velocity is 0 ( not jumping or falling ) apply impulse to make the body "jump"
 							if (velocity.y === 0) {
 								physics.body.applyLinearImpulse(
-									new Vec2(0, -120),
+									new Vec2(0, -320),
 									physics.body.getWorldCenter(),
 								);
 								velocity.y = physics.velocity.y;

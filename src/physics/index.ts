@@ -4,7 +4,7 @@ import { EntityType } from "../constants";
 Settings.lengthUnitsPerMeter = 10;
 
 export const physicsWorld = new World({
-	gravity: new Vec2(0, 9.8*20),
+	gravity: new Vec2(0, 9.8*100),
 });
 
 export function isEntityTypeInContact(
