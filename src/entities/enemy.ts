@@ -32,7 +32,7 @@ export function createEnemy(
 		width: 26,
 		height: 26,
 		frames: 10,
-		center: Vec2(13, 13),
+		center: new Vec2(13, 13),
 		flip: true
 	});
 
@@ -42,9 +42,10 @@ export function createEnemy(
 		enemy,
 		new PhysicsComponent({
 			entityType: EntityType.ENEMY,
+			bodyType: 'static',
 			position,
 			shape: new Box(11.5, 14),
-			fixtureOpt: { friction: 0 },
+			fixtureOpt: { filterGroupIndex: -1 },
 		}),
 	);
 	ecs.emplace(enemy, new MovementComponent(getMovementDirection(direction)));

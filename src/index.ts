@@ -11,6 +11,7 @@ import { MovementSystem } from "./systems/MovementSystem";
 import { PreRenderSystem } from "./systems/PreRenderSystem";
 import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
 import { UpdateSpriteStateSystem } from "./systems/UpdateSpriteStateSystem";
+import { EnemyAiSystem } from "./systems/EnemyAiSystem";
 
 import { createPlayer } from "./entities/player";
 import {
@@ -22,6 +23,7 @@ import {
 	getLevel,
 } from "./level";
 import { createEnemy } from "./entities/enemy";
+import { BombSystem } from "./systems/BombSystem";
 
 const canvas = document.querySelector("canvas");
 
@@ -80,11 +82,11 @@ function main() {
 		);
 	});
 
-	getEntities(EntityId.ENEMY)?.forEach((enemy) => {
+	const enemies = getEntities(EntityId.ENEMY)?.map((enemy) => {
 		const position = enemy.px;
 		const direction = getEntityEnum(enemy, EntityEnum.DIRECTION);
-		createEnemy(ecs, new Vec2(position[0], position[1]), direction);
-	});
+		return createEnemy(ecs, new Vec2(position[0], position[1]), direction);
+	}) ?? [];
 
 	const playerPosition = getEntities(EntityId.PLAYER)?.[0]?.px;
 	if (!playerPosition) {
@@ -99,6 +101,9 @@ function main() {
 
 	ecs.register(InputSystem(ecs, player));
 	ecs.register(MovementSystem(ecs));
+
+	ecs.register(EnemyAiSystem(ecs, player, enemies));
+	ecs.register(BombSystem(ecs, player));
 
 	ecs.register(UpdateSpriteStateSystem(ecs));
 	ecs.register(FallingRocksSystem(ecs, player));
