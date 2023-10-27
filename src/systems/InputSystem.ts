@@ -1,6 +1,11 @@
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 import { Action, ActionComponent } from "../components/ActionComponent";
 
+// disable double-tap on iOS
+document.ondblclick = function(e) {
+    e.preventDefault();
+}
+
 const pressed = new Map<string, boolean>();
 
 document.addEventListener("keydown", (evt) => {

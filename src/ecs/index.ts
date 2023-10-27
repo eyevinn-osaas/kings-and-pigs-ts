@@ -25,6 +25,8 @@ export const SystemDefaults: Omit<System, "handler" | "query"> = {
 
 type ComponentClass<T extends Component> = new (...args: any[]) => T;
 
+let uuid = 0;
+
 export function init() {
 	const registry: Entity[] = [];
 	const components: Map<Entity, Map<Function, Component>> = new Map();
@@ -33,7 +35,7 @@ export function init() {
 	let lastTime = 0;
 	return {
 		create: () => {
-			const entity: Entity = crypto.randomUUID();
+			const entity: Entity = (++uuid).toString();
 			registry.push(entity);
 			components.set(entity, new Map());
 			return entity;

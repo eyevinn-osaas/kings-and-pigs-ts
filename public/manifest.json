@@ -1,0 +1,15 @@
+{
+  "name": "DungeonSurvival",
+  "short_name": "DS",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#3F3851",
+  "description": "A dungeon survival game.",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "58x58",
+      "type": "image/png"
+    }
+  ]
+}

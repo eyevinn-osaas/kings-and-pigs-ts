@@ -56,6 +56,9 @@ function start(ecs: ECS) {
 		const playerHealth = ecs.get(game.player, HealthComponent);
 		if (playerHealth && playerHealth.health > 0) {
 			requestAnimationFrame(loop);
+		} else {
+			// TODO: temp hack to reload
+			document.onclick = () => window.location.reload();
 		}
 	};
 	requestAnimationFrame(loop);
