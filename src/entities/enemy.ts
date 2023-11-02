@@ -1,5 +1,3 @@
-import enemyIdleSprite from "../../public/assets/sprites/05-pig_thowing_a_bomb/idle_(26x26).png";
-
 import { Sprite } from "../gfx/AnimatedSprite";
 import { ECS } from "../ecs";
 import { Box, Vec2 } from "planck";
@@ -7,11 +5,13 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 import {
 	MovementComponent,
 	MovementDirection,
-	MovementState,
 } from "../components/MovementComponent";
 import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
 import { EntityType } from "../constants";
 import { LdtkDirection } from "../level";
+
+import enemyIdleSprite from "../../public/assets/sprites/05-pig_thowing_a_bomb/idle_(26x26).png";
+import enemyAttackingSprite from "../../public/assets/sprites/05-pig_thowing_a_bomb/throwing_boom_(26x26).png";
 
 function getMovementDirection(
 	direction: LdtkDirection,
@@ -36,6 +36,16 @@ export function createEnemy(
 		flip: true
 	});
 
+	const attackingSprite = new Sprite({
+		url: enemyAttackingSprite,
+		width: 26,
+		height: 26,
+		frames: 5,
+		center: new Vec2(13, 13),
+		flip: true,
+		loop: false
+	});
+
 	const enemy = ecs.create();
 
 	ecs.emplace(
@@ -53,6 +63,7 @@ export function createEnemy(
 		enemy,
 		new AnimatedSpriteComponent({
 			[SpriteVariant.IDLE]: idleSprite,
+			[SpriteVariant.ATTACKING]: attackingSprite
 		}),
 	);
 

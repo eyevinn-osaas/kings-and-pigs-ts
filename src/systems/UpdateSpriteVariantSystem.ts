@@ -1,8 +1,11 @@
-import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
+import {
+	AnimatedSpriteComponent,
+	SpriteVariant,
+} from "../components/AnimatedSpriteComponent";
 import {
 	MovementComponent,
 	MovementDirection,
-    MovementState,
+	MovementState,
 } from "../components/MovementComponent";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 
@@ -15,7 +18,16 @@ export const UpdateSpriteVariantSystem = (ecs: ECS): System => ({
 			const movement = ecs?.get(entity, MovementComponent);
 
 			if (sprite && movement) {
-				switch(movement.state) {
+				if (movement.direction === MovementDirection.LEFT) {
+					sprite.flip = true;
+				} else if (movement.direction === MovementDirection.RIGHT) {
+					sprite.flip = false;
+				}
+
+				if (sprite.variant === SpriteVariant.ATTACKING) {
+					return;
+				}
+				switch (movement.state) {
 					case MovementState.IDLE:
 						sprite.variant = SpriteVariant.IDLE;
 						break;
@@ -28,12 +40,6 @@ export const UpdateSpriteVariantSystem = (ecs: ECS): System => ({
 					case MovementState.FALLING:
 						sprite.variant = SpriteVariant.FALLING;
 						break;
-				}
-
-				if (movement.direction === MovementDirection.LEFT) {
-					sprite.flip = true;
-				} else if (movement.direction === MovementDirection.RIGHT) {
-					sprite.flip = false;
 				}
 			}
 		});

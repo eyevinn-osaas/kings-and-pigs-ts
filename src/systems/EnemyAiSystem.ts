@@ -3,11 +3,16 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 import { EntityType } from "../constants";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 import { Sprite } from "../gfx/AnimatedSprite";
-import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
+import {
+	AnimatedSpriteComponent,
+	SpriteVariant,
+} from "../components/AnimatedSpriteComponent";
 
 import bombOnSprite from "../../public/assets/sprites/09-bomb/bomb_on_(52x56).png";
 import bombBoomSprite from "../../public/assets/sprites/09-bomb/boooooom_(52x56).png";
 import { HealthComponent } from "../components/HealthComponent";
+
+let lastAttackTime = 0;
 
 export const EnemyAiSystem = (
 	ecs: ECS,
@@ -16,7 +21,6 @@ export const EnemyAiSystem = (
 ): System => ({
 	...SystemDefaults,
 	lag: 0,
-	msPerTick: 1000,
 	query: {
 		entities: [player, ...enemies],
 	},
@@ -26,15 +30,35 @@ export const EnemyAiSystem = (
 		if (!playerPhysics || !playerHealth?.health) {
 			return;
 		}
+
+		let willAttack = false;
+		if (Date.now() - lastAttackTime > 500) {
+			lastAttackTime = Date.now();
+			willAttack = true;
+		}
+
 		enemies.forEach((enemy) => {
 			const enemyPhysics = ecs.get(enemy, PhysicsComponent);
-			if (!enemyPhysics) {
+			const enemySprite = ecs.get(enemy, AnimatedSpriteComponent);
+			if (!enemyPhysics || !enemySprite) {
 				return;
+			}
+
+			if (willAttack && Math.random() > 0.25) {
+				enemySprite.variant = SpriteVariant.ATTACKING;
+			}
+
+			if (
+				enemySprite.variant !== SpriteVariant.ATTACKING ||
+				enemySprite.frameIndex !== enemySprite.totalFrames
+			) {
+				return;
+			} else {
+				enemySprite.variant = SpriteVariant.IDLE;
 			}
 
 			const startPosition = enemyPhysics.position.clone();
 			const targetPosition = playerPhysics.position;
-
 
 			// TODO: remove ugly hack that prevents bomb from touching at first frames
 			// 26 is width of pigs.
