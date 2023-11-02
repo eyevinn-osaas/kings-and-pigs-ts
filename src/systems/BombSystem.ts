@@ -1,15 +1,17 @@
 import { PhysicsComponent } from "../components/PhysicsComponent";
-import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
+import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
 import { EntityType } from "../constants";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
-import { MovementState } from "../components/MovementComponent";
 import { isEntityTypeInContact } from "../physics";
+import { HealthComponent } from "../components/HealthComponent";
 
 export const BombSystem = (ecs: ECS, player: Entity): System => ({
 	...SystemDefaults,
 	msPerTick: 1000 / 60,
 	query: {},
 	handler(entities: Entity[]) {
+		const playerHealth = ecs.get(player, HealthComponent);
+
 		entities.forEach((entity) => {
 			const physics = ecs.get(entity, PhysicsComponent);
 
@@ -24,17 +26,20 @@ export const BombSystem = (ecs: ECS, player: Entity): System => ({
 				if (
 					(isEntityTypeInContact(contactList, EntityType.TERRAIN) ||
 						isEntityTypeInContact(contactList, EntityType.PLAYER)) &&
-					sprite.state !== MovementState.RUNNING
+					sprite.variant !== SpriteVariant.ATTACKING
 				) {
-					sprite.state = MovementState.RUNNING;
-				} else if (
-					sprite.state === MovementState.RUNNING &&
-					sprite.frameIndex + 1 === sprite.totalFrames
-				) {
-					if (isEntityTypeInContact(contactList, EntityType.PLAYER)) {
-						ecs.delete(player);
+					// TODO: shouldn't update the sprite, should update the entity to action attacking or so.
+					sprite.variant = SpriteVariant.ATTACKING;
+				} else if (sprite.variant === SpriteVariant.ATTACKING) {
+					if (
+						playerHealth &&
+						isEntityTypeInContact(contactList, EntityType.PLAYER)
+					) {
+						playerHealth.health = 0;
 					}
-					ecs.delete(entity);
+					if (sprite.frameIndex === sprite.totalFrames) {
+						ecs.delete(entity);
+					}
 				}
 			}
 		});

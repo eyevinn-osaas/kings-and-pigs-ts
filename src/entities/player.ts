@@ -1,7 +1,4 @@
-import playerIdleSprite from "../../public/assets/sprites/01-king_human/idle_(78x58).png";
-import playerRunSprite from "../../public/assets/sprites/01-king_human/run_(78x58).png";
-import playerJumpSprite from "../../public/assets/sprites/01-king_human/jump_(78x58).png";
-import playerFallSprite from "../../public/assets/sprites/01-king_human/fall_(78x58).png";
+
 import { Sprite } from "../gfx/AnimatedSprite";
 import { ECS } from "../ecs";
 import { Box, Vec2 } from "planck";
@@ -9,11 +6,16 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 import { ActionComponent } from "../components/ActionComponent";
 import {
 	MovementComponent,
-	MovementState,
 } from "../components/MovementComponent";
 import { HealthComponent } from "../components/HealthComponent";
-import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
+import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
 import { EntityType } from "../constants";
+
+import playerIdleSprite from "../../public/assets/sprites/01-king_human/idle_(78x58).png";
+import playerRunSprite from "../../public/assets/sprites/01-king_human/run_(78x58).png";
+import playerJumpSprite from "../../public/assets/sprites/01-king_human/jump_(78x58).png";
+import playerFallSprite from "../../public/assets/sprites/01-king_human/fall_(78x58).png";
+import playerDeadSprite from "../../public/assets/sprites/01-king_human/dead_(78x58).png";
 
 export function createPlayer(ecs: ECS, position: Vec2) {
 	const idleSprite = new Sprite({
@@ -48,6 +50,15 @@ export function createPlayer(ecs: ECS, position: Vec2) {
 		center: Vec2(32, 32),
 	});
 
+	const deadSprite = new Sprite({
+		url: playerDeadSprite,
+		width: 78,
+		height: 58,
+		frames: 4,
+		center: Vec2(32, 32),
+		loop: false
+	});
+
 	const player = ecs.create();
 
 	ecs.emplace(
@@ -65,10 +76,11 @@ export function createPlayer(ecs: ECS, position: Vec2) {
 	ecs.emplace(
 		player,
 		new AnimatedSpriteComponent({
-			[MovementState.IDLE]: idleSprite,
-			[MovementState.RUNNING]: runSprite,
-			[MovementState.FALLING]: fallSprite,
-			[MovementState.JUMPING]: jumpSprite,
+			[SpriteVariant.IDLE]: idleSprite,
+			[SpriteVariant.RUNNING]: runSprite,
+			[SpriteVariant.FALLING]: fallSprite,
+			[SpriteVariant.JUMPING]: jumpSprite,
+			[SpriteVariant.DYING]: deadSprite,
 		}),
 	);
 

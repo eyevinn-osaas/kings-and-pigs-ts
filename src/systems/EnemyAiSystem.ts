@@ -3,11 +3,11 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 import { EntityType } from "../constants";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 import { Sprite } from "../gfx/AnimatedSprite";
-import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
-import { MovementState } from "../components/MovementComponent";
+import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
 
 import bombOnSprite from "../../public/assets/sprites/09-bomb/bomb_on_(52x56).png";
 import bombBoomSprite from "../../public/assets/sprites/09-bomb/boooooom_(52x56).png";
+import { HealthComponent } from "../components/HealthComponent";
 
 export const EnemyAiSystem = (
 	ecs: ECS,
@@ -21,17 +21,20 @@ export const EnemyAiSystem = (
 		entities: [player, ...enemies],
 	},
 	handler([player, ...enemies]: Entity[]) {
+		const playerHealth = ecs.get(player, HealthComponent);
 		const playerPhysics = ecs.get(player, PhysicsComponent);
+		if (!playerPhysics || !playerHealth?.health) {
+			return;
+		}
 		enemies.forEach((enemy) => {
 			const enemyPhysics = ecs.get(enemy, PhysicsComponent);
-
-			const startPosition = enemyPhysics?.position.clone();
-			const targetPosition = playerPhysics?.position;
-
-			if (!startPosition || !targetPosition) {
-				// this should never happen...
+			if (!enemyPhysics) {
 				return;
 			}
+
+			const startPosition = enemyPhysics.position.clone();
+			const targetPosition = playerPhysics.position;
+
 
 			// TODO: remove ugly hack that prevents bomb from touching at first frames
 			// 26 is width of pigs.
@@ -52,14 +55,14 @@ export const EnemyAiSystem = (
 			});
 			ecs.emplace(bomb, physics);
 
-			const onSprite = new Sprite({
+			const bombOn = new Sprite({
 				url: bombOnSprite,
 				width: 52,
 				height: 56,
 				frames: 4,
 				center: new Vec2(26, 29),
 			});
-			const boomSprite = new Sprite({
+			const boom = new Sprite({
 				url: bombBoomSprite,
 				width: 52,
 				height: 56,
@@ -69,11 +72,8 @@ export const EnemyAiSystem = (
 			ecs.emplace(
 				bomb,
 				new AnimatedSpriteComponent({
-					// TODO: this component really needs to change....
-					[MovementState.IDLE]: onSprite,
-					[MovementState.RUNNING]: boomSprite,
-					[MovementState.FALLING]: onSprite,
-					[MovementState.JUMPING]: onSprite,
+					[SpriteVariant.IDLE]: bombOn,
+					[SpriteVariant.ATTACKING]: boom,
 				}),
 			);
 

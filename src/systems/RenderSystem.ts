@@ -18,6 +18,8 @@ export const RenderSystem = (ecs: ECS): System => ({
 			return;
 		}
 
+		context.clearRect(0, 0, canvas?.width, canvas?.height);
+
 		context.drawImage(levelComposite, 0, 0, canvas.width, canvas.height);
 
 		entities.forEach((entity) => {

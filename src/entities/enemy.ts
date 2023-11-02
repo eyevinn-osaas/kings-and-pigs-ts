@@ -9,7 +9,7 @@ import {
 	MovementDirection,
 	MovementState,
 } from "../components/MovementComponent";
-import { AnimatedSpriteComponent } from "../components/AnimatedSpriteComponent";
+import { AnimatedSpriteComponent, SpriteVariant } from "../components/AnimatedSpriteComponent";
 import { EntityType } from "../constants";
 import { LdtkDirection } from "../level";
 
@@ -52,10 +52,7 @@ export function createEnemy(
 	ecs.emplace(
 		enemy,
 		new AnimatedSpriteComponent({
-			[MovementState.IDLE]: idleSprite,
-			[MovementState.RUNNING]: idleSprite,
-			[MovementState.FALLING]: idleSprite,
-			[MovementState.JUMPING]: idleSprite,
+			[SpriteVariant.IDLE]: idleSprite,
 		}),
 	);
 

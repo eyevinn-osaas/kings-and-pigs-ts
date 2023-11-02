@@ -1,35 +1,65 @@
 import { Vec2 } from "planck";
 import { Sprite } from "../gfx/AnimatedSprite";
 import { Component } from "../ecs";
-import { MovementState } from "./MovementComponent";
 
-type MovementSpriteMap = {
-	[key in MovementState]: Sprite;
+export enum SpriteVariant {
+	IDLE = "IDLE",
+	RUNNING = "RUNNING",
+	FALLING = "FALLING",
+	JUMPING = "JUMPING",
+	ATTACKING = "ATTACKING",
+	DYING = "DYING",
+}
+
+type SpriteVariantMap = {
+	[key in SpriteVariant]?: Sprite;
 };
 
+const emptySprite = new Sprite({
+	url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+	width: 0,
+	height: 0,
+	frames: 0,
+	center: new Vec2(0, 0),
+});
+
 export class AnimatedSpriteComponent extends Component {
-	private _state: MovementState = MovementState.IDLE;
+	private _variant: SpriteVariant = SpriteVariant.IDLE;
 	private _flip: boolean = false;
-	private spriteMap: MovementSpriteMap;
+	private spriteMap: SpriteVariantMap;
 
-	public frameIndex = 0;
+	private _frameIndex = 0;
 
-	constructor(spriteMap: MovementSpriteMap) {
+	constructor(spriteMap: SpriteVariantMap) {
 		super();
 		this.spriteMap = spriteMap;
 	}
 
+	tick() {
+		this._frameIndex += 1;
+		if (this._frameIndex > this.totalFrames) {
+			this._frameIndex = this.activeSprite.loop ? 0 : this.totalFrames;
+		}
+	}
+
 	get activeSprite() {
-		return this.spriteMap[this._state];
+		return this.spriteMap[this._variant] ?? emptySprite;
 	}
 
-	get state() {
-		return this._state;
+	get variant() {
+		return this._variant;
 	}
 
-	set state(state: MovementState) {
-		this._state = state;
-		this.frameIndex = 0;
+	set variant(variant: SpriteVariant) {
+		if (variant === this._variant) {
+			return;
+		}
+		this._variant = variant;
+		this._frameIndex = 0;
+	}
+
+	get frameIndex() {
+		return this._frameIndex;
 	}
 
 	get flip() {
@@ -37,7 +67,7 @@ export class AnimatedSpriteComponent extends Component {
 	}
 
 	set flip(flip) {
-		this._flip = flip
+		this._flip = flip;
 	}
 
 	get spriteSheet() {

@@ -54,6 +54,10 @@ export function init() {
 			const entityComponents = components.get(entity);
 			entityComponents?.set(component.constructor, component);
 		},
+		destroy(entity: Entity, component: Component) {
+			const entityComponents = components.get(entity);
+			entityComponents?.delete(component.constructor);
+		},
 		// TODO: ?
 		// registerInputSystem()
 		// registerUpdateSystem()

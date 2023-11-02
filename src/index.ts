@@ -4,13 +4,11 @@ import { PhysicsSystem } from "./systems/PhysicsSystem";
 import { DebugRenderSystem } from "./systems/DebugRenderSystem";
 import { Box, Vec2 } from "planck";
 import { PhysicsComponent } from "./components/PhysicsComponent";
-import { FallingRocksSystem } from "./systems/FallingRocksSystem";
 import { HealthComponent } from "./components/HealthComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
-import { PreRenderSystem } from "./systems/PreRenderSystem";
 import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
-import { UpdateSpriteStateSystem } from "./systems/UpdateSpriteStateSystem";
+import { UpdateSpriteVariantSystem } from "./systems/UpdateSpriteVariantSystem";
 import { EnemyAiSystem } from "./systems/EnemyAiSystem";
 
 import { createPlayer } from "./entities/player";
@@ -24,6 +22,7 @@ import {
 } from "./level";
 import { createEnemy } from "./entities/enemy";
 import { BombSystem } from "./systems/BombSystem";
+import { HealthSystem } from "./systems/HealthSystem";
 
 const canvas = document.querySelector("canvas");
 
@@ -52,14 +51,7 @@ function start(ecs: ECS) {
 		}
 
 		ecs?.tick(time);
-
-		const playerHealth = ecs.get(game.player, HealthComponent);
-		if (playerHealth && playerHealth.health > 0) {
-			requestAnimationFrame(loop);
-		} else {
-			// TODO: temp hack to reload
-			document.onclick = () => window.location.reload();
-		}
+		requestAnimationFrame(loop);
 	};
 	requestAnimationFrame(loop);
 }
@@ -107,14 +99,13 @@ function main() {
 
 	ecs.register(EnemyAiSystem(ecs, player, enemies));
 	ecs.register(BombSystem(ecs, player));
+	ecs.register(HealthSystem(ecs, player));
 
-	ecs.register(UpdateSpriteStateSystem(ecs));
-	ecs.register(FallingRocksSystem(ecs, player));
-	ecs.register(PhysicsSystem(ecs));
-
+	ecs.register(UpdateSpriteVariantSystem(ecs));
 	ecs.register(AnimateSpriteSystem(ecs));
 
-	ecs.register(PreRenderSystem());
+	ecs.register(PhysicsSystem(ecs));
+
 	ecs.register(RenderSystem(ecs));
 	ecs.register(DebugRenderSystem(ecs));
 
