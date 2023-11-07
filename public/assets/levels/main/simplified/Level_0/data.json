@@ -40,19 +40,32 @@
 				"customFields": {
 					"Direction": "Right"
 				}
-			}
-		],
-		"Door": [
+			},
 			{
-				"id": "Door",
-				"iid": "0cfeb230-6280-11ee-862e-bda0567f87a7",
+				"id": "Enemy",
+				"iid": "e4ce09f0-6280-11ee-a008-bfb94c6ed7ea",
 				"layer": "Entities",
-				"x": 304,
-				"y": 288,
-				"width": 46,
-				"height": 56,
-				"color": 14984818,
-				"customFields" : {}
+				"x": 336,
+				"y": 112,
+				"width": 28,
+				"height": 28,
+				"color": 14120515,
+				"customFields": {
+					"Direction": "Right"
+				}
+			},
+			{
+				"id": "Enemy",
+				"iid": "e55b2ec0-6280-11ee-a008-4ff5bb26eb7e",
+				"layer": "Entities",
+				"x": 272,
+				"y": 112,
+				"width": 28,
+				"height": 28,
+				"color": 14120515,
+				"customFields": {
+					"Direction": "Left"
+				}
 			}
 		],
 		"Player": [

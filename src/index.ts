@@ -24,6 +24,8 @@ import { createEnemy } from "./entities/enemy";
 import { BombSystem } from "./systems/BombSystem";
 import { HealthSystem } from "./systems/HealthSystem";
 
+const DEBUG = process.env.DEBUG === "true";
+
 const canvas = document.querySelector("canvas");
 
 if (!canvas) {
@@ -46,10 +48,6 @@ const game: Game = {
 
 function start(ecs: ECS) {
 	const loop = (time: number) => {
-		if (!game.player) {
-			return;
-		}
-
 		ecs?.tick(time);
 		requestAnimationFrame(loop);
 	};
@@ -107,7 +105,10 @@ function main() {
 	ecs.register(PhysicsSystem(ecs));
 
 	ecs.register(RenderSystem(ecs));
-	ecs.register(DebugRenderSystem(ecs));
+
+	if (DEBUG) {
+		ecs.register(DebugRenderSystem(ecs));
+	}
 
 	start(ecs);
 }
