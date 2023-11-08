@@ -44,7 +44,7 @@ export const EnemyAiSystem = (
 				return;
 			}
 
-			if (willAttack && Math.random() > 0.6) {
+			if (willAttack && Math.random() > 0.75) {
 				enemySprite.variant = SpriteVariant.ATTACKING;
 			}
 

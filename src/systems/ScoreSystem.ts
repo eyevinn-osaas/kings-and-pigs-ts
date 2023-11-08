@@ -10,6 +10,7 @@ try {
 
 const scoreElement = document.querySelector<HTMLSpanElement>("#score");
 
+// TODO: move to an entity
 let score = 0;
 export const ScoreSystem = (ecs: ECS, player: Entity): System => ({
 	...SystemDefaults,

@@ -1,4 +1,3 @@
-
 import { Sprite } from "../gfx/AnimatedSprite";
 import { ECS } from "../ecs";
 import { Box, Vec2 } from "planck";

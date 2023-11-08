@@ -1,10 +1,9 @@
-import { ECS, Entity, init } from "./ecs";
+import { ECS, init } from "./ecs";
 import { InputSystem } from "./systems/InputSystem";
 import { PhysicsSystem } from "./systems/PhysicsSystem";
 import { DebugRenderSystem } from "./systems/DebugRenderSystem";
 import { Box, Vec2 } from "planck";
 import { PhysicsComponent } from "./components/PhysicsComponent";
-import { HealthComponent } from "./components/HealthComponent";
 import { RenderSystem } from "./systems/RenderSystem";
 import { MovementSystem } from "./systems/MovementSystem";
 import { AnimateSpriteSystem } from "./systems/AnimateSpriteSystem";
