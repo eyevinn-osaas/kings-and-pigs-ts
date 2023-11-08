@@ -20,7 +20,7 @@ export const EnemyAiSystem = (
 	enemies: Entity[],
 ): System => ({
 	...SystemDefaults,
-	lag: 0,
+	msPerTick: 1 / 60,
 	query: {
 		entities: [player, ...enemies],
 	},
@@ -60,7 +60,8 @@ export const EnemyAiSystem = (
 			const startPosition = enemyPhysics.position.clone();
 			const targetPosition = playerPhysics.position;
 
-			// TODO: remove ugly hack that prevents bomb from touching at first frames
+			// TODO: remove ugly hack that prevents bomb from colliding with the ground
+			// the pigs stands on.
 			// 26 is width of pigs.
 			if (targetPosition.x > startPosition.x) {
 				startPosition.x += 26;
@@ -101,7 +102,7 @@ export const EnemyAiSystem = (
 				}),
 			);
 
-			// TODO: make this system actually good
+			// TODO: math that actually makes sense...
 			const xRandomDistance =
 				Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1);
 			const xImpulse = -(

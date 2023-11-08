@@ -17,6 +17,7 @@
     "prettier": "^3.0.3"
   },
   "dependencies": {
+    "@types/node": "^20.9.0",
     "planck": "^1.0.0-beta.16"
   }
 }

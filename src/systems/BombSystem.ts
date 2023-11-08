@@ -7,7 +7,6 @@ import { HealthComponent } from "../components/HealthComponent";
 
 export const BombSystem = (ecs: ECS, player: Entity): System => ({
 	...SystemDefaults,
-	msPerTick: 1000 / 60,
 	query: {},
 	handler(entities: Entity[]) {
 		const playerHealth = ecs.get(player, HealthComponent);

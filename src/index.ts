@@ -23,6 +23,7 @@ import {
 import { createEnemy } from "./entities/enemy";
 import { BombSystem } from "./systems/BombSystem";
 import { HealthSystem } from "./systems/HealthSystem";
+import { ScoreSystem } from "./systems/ScoreSystem";
 
 const DEBUG = process.env.DEBUG === "true";
 
@@ -31,20 +32,6 @@ const canvas = document.querySelector("canvas");
 if (!canvas) {
 	throw "[Dungeon Survival] No canvas found!";
 }
-
-// TODO: move this...
-export type Game = {
-	ecs?: ReturnType<typeof init>;
-	player?: Entity;
-
-	width: number;
-	height: number;
-};
-
-const game: Game = {
-	width: canvas.width,
-	height: canvas.height,
-};
 
 function start(ecs: ECS) {
 	const loop = (time: number) => {
@@ -75,11 +62,12 @@ function main() {
 		);
 	});
 
-	const enemies = getEntities(EntityId.ENEMY)?.map((enemy) => {
-		const position = enemy.px;
-		const direction = getEntityEnum(enemy, EntityEnum.DIRECTION);
-		return createEnemy(ecs, new Vec2(position[0], position[1]), direction);
-	}) ?? [];
+	const enemies =
+		getEntities(EntityId.ENEMY)?.map((enemy) => {
+			const position = enemy.px;
+			const direction = getEntityEnum(enemy, EntityEnum.DIRECTION);
+			return createEnemy(ecs, new Vec2(position[0], position[1]), direction);
+		}) ?? [];
 
 	const playerPosition = getEntities(EntityId.PLAYER)?.[0]?.px;
 	if (!playerPosition) {
@@ -89,8 +77,6 @@ function main() {
 		ecs,
 		new Vec2(playerPosition[0], playerPosition[1]),
 	);
-
-	game.player = player;
 
 	ecs.register(InputSystem(ecs, player));
 	ecs.register(MovementSystem(ecs));
@@ -102,9 +88,13 @@ function main() {
 	ecs.register(UpdateSpriteVariantSystem(ecs));
 	ecs.register(AnimateSpriteSystem(ecs));
 
+
+	ecs.register(ScoreSystem(ecs, player));
+
 	ecs.register(PhysicsSystem(ecs));
 
 	ecs.register(RenderSystem(ecs));
+
 
 	if (DEBUG) {
 		ecs.register(DebugRenderSystem(ecs));
@@ -112,5 +102,16 @@ function main() {
 
 	start(ecs);
 }
+
+// TODO: create a not so hacky way to restart the game...
+document.addEventListener("keydown", (evt) => {
+	if (evt.code === "KeyR") {
+		window.location.reload();
+	}
+});
+
+document
+	.querySelector<HTMLButtonElement>("#restart")
+	?.addEventListener("click", () => window.location.reload());
 
 window.onload = main;

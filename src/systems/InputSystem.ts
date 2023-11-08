@@ -8,10 +8,8 @@ document.ondblclick = function(e) {
 
 const pressed = new Map<string, boolean>();
 
+
 document.addEventListener("keydown", (evt) => {
-	if (evt.code === "KeyR") {
-		window.location.reload();
-	}
 	pressed.set(evt.code, true);
 });
 

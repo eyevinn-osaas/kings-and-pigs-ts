@@ -58,10 +58,6 @@ export function init() {
 			const entityComponents = components.get(entity);
 			entityComponents?.delete(component.constructor);
 		},
-		// TODO: ?
-		// registerInputSystem()
-		// registerUpdateSystem()
-		// registerRenderSystem()
 		register(system: System) {
 			systems.push(system);
 		},
@@ -74,8 +70,6 @@ export function init() {
 		tick(time: number) {
 			let delta = time - lastTime;
 			lastTime = time;
-			// TODO: implement three different ticks, input, update, and render that run at different times.
-			// eg. input always runs, update sometimes runs, and render always runs but provides a time to the render system to adjust for lag.
 			systems.forEach((system) => {
 				if (system.msPerTick === ALWAYS_TICK) {
 					system.handler(system.query.entities || registry);
