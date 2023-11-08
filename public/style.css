@@ -7,6 +7,12 @@
 	user-select: none;
 }
 
+a, a:visited {
+	position: relative;
+	z-index: 1;
+	color: #ffffff;
+}
+
 body {
 	margin: 0;
 	padding: 0;
