@@ -16,34 +16,39 @@
 			<span id="score"></span>
 			<canvas width="640" height="352"></canvas>
 		</section>
-		<div class="touch">
-			<div class="jump"></div>
-			<div class="movement">
-				<div class="left"></div>
-				<div class="right"></div>
+		<div id="bottom">
+			<div class="touch">
+				<div class="jump"></div>
+				<div class="movement">
+					<div class="left"></div>
+					<div class="right"></div>
+				</div>
+			</div>
+			<div>
+				<section>
+					<p>
+						You've been captured by the evil pigs! Survive as long as you can!
+					</p>
+				</section>
+				<section>
+					<h3>Controls desktop</h3>
+					<p>Use the left & right arrow keys to move left and right</p>
+					<p></p>
+					<p>Press space to jump</p>
+					<p></p>
+					<p>Press 'r' to restart the game</p>
+					<p></p>
+				</section>
+				<section>
+					<h3>Controls mobile</h3>
+					<p>
+						Press the lower left/right part of the screen to move left/right
+					</p>
+					<p>Press the upper part of the screen to jump</p>
+					<button id="restart">Press here to restart</button>
+				</section>
 			</div>
 		</div>
-		<div>
-			<section>
-			<p>You've been captured by the evil pigs! Survive as long as you can!</p>
-			</section>
-			<section>
-				<h3>Controls desktop</h3>
-				<p>Use the left & right arrow keys to move left and right</p>
-				<p></p>
-				<p>Press space to jump</p>
-				<p></p>
-				<p>Press 'r' to restart the game</p>
-				<p></p>
-			</section>
-			<section>
-				<h3>Controls mobile</h3>
-				<p>Press the lower left/right part of the screen to move left/right</p>
-				<p>Press the upper part of the screen to jump</p>
-				<button id="restart">Press here to restart</button>
-			</section>
-		</div>
-
 		<script type="module" src="../src/index.ts"></script>
 	</body>
 </html>

@@ -51,6 +51,10 @@ section {
 	margin: 1rem 0;
 }
 
+#bottom {
+	padding: 1rem;
+}
+
 .touch {
 	position: absolute;
 	top: 0;
