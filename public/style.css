@@ -3,6 +3,10 @@
 	src: url("assets/fonts/pixelify/PixelifySans-Regular.ttf") format("truetype");
 }
 
+* {
+	user-select: none;
+}
+
 body {
 	margin: 0;
 	padding: 0;
