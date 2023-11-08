@@ -1,3 +1,5 @@
+![](docs/game.png)
+
 # Kings and Pigs - TypeScript
 
 This is a simple 2D game written in TypeScript using a custom ECS (Entity-Component-System) architecture, 2D Canvas for rendering & [Planck.js](https://piqnt.com/planck.js) for the physics.
