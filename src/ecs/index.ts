@@ -32,7 +32,7 @@ export function init() {
 	const components: Map<Entity, Map<Function, Component>> = new Map();
 	const systems: System[] = [];
 
-	let lastTime = 0;
+	let lastTime: number | undefined;
 	return {
 		create: () => {
 			const entity: Entity = (++uuid).toString();
@@ -68,6 +68,9 @@ export function init() {
 			return components.get(entity)?.get(componentClass) as T | undefined;
 		},
 		tick(time: number) {
+			if (lastTime === undefined) {
+				lastTime = time;
+			}
 			let delta = time - lastTime;
 			lastTime = time;
 			systems.forEach((system) => {
@@ -83,6 +86,16 @@ export function init() {
 				}
 			});
 		},
+		reset() {
+			registry.forEach((entity) => {
+				components.get(entity)?.forEach((component) => {
+					component.destroy();
+				});
+			});
+			components.clear();
+			registry.length = 0;
+			systems.length = 0;
+		}
 	};
 }
 

@@ -23,6 +23,7 @@ import { createEnemy } from "./entities/enemy";
 import { BombSystem } from "./systems/BombSystem";
 import { HealthSystem } from "./systems/HealthSystem";
 import { ScoreSystem } from "./systems/ScoreSystem";
+import { createScore } from "./entities/score";
 
 const DEBUG = process.env.DEBUG === "true";
 
@@ -32,15 +33,21 @@ if (!canvas) {
 	throw "[Dungeon Survival] No canvas found!";
 }
 
-function start(ecs: ECS) {
+let animationRequestId: number = -1;
+function startGameLoop(ecs: ECS) {
 	const loop = (time: number) => {
 		ecs?.tick(time);
-		requestAnimationFrame(loop);
+		animationRequestId = requestAnimationFrame(loop);
 	};
-	requestAnimationFrame(loop);
+	animationRequestId = requestAnimationFrame(loop);
 }
 
-function main() {
+function stopGameLoop(ecs: ECS) {
+	cancelAnimationFrame(animationRequestId);
+	ecs.reset();
+}
+
+function start(): () => void {
 	const ecs = init();
 
 	const level = getLevel();
@@ -87,30 +94,37 @@ function main() {
 	ecs.register(UpdateSpriteVariantSystem(ecs));
 	ecs.register(AnimateSpriteSystem(ecs));
 
-
-	ecs.register(ScoreSystem(ecs, player));
+	ecs.register(ScoreSystem(ecs, player, createScore(ecs)));
 
 	ecs.register(PhysicsSystem(ecs));
 
 	ecs.register(RenderSystem(ecs));
 
-
 	if (DEBUG) {
 		ecs.register(DebugRenderSystem(ecs));
 	}
 
-	start(ecs);
+	startGameLoop(ecs);
+
+	return () => stopGameLoop(ecs);
 }
 
-// TODO: create a not so hacky way to restart the game...
-document.addEventListener("keydown", (evt) => {
-	if (evt.code === "KeyR") {
-		window.location.reload();
-	}
-});
 
-document
-	.querySelector<HTMLButtonElement>("#restart")
-	?.addEventListener("click", () => window.location.reload());
+window.onload = () => {
+	let stop = start();
 
-window.onload = main;
+	document
+		.querySelector<HTMLButtonElement>("#restart")
+		?.addEventListener("click", () => {
+			stop();
+			stop = start();
+		});
+
+	// TODO: create a not so hacky way to restart the game...
+	document.onkeydown = (evt) => {
+		if (evt.code === "KeyR") {
+			stop();
+			stop = start();
+		}
+	};
+}

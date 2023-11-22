@@ -12,15 +12,13 @@ import bombOnSprite from "../../public/assets/sprites/09-bomb/bomb_on_(52x56).pn
 import bombBoomSprite from "../../public/assets/sprites/09-bomb/boooooom_(52x56).png";
 import { HealthComponent } from "../components/HealthComponent";
 
-let lastAttackTime = 0;
-
 export const EnemyAiSystem = (
 	ecs: ECS,
 	player: Entity,
 	enemies: Entity[],
 ): System => ({
 	...SystemDefaults,
-	msPerTick: 1 / 60,
+	msPerTick: 1000 / 60,
 	query: {
 		entities: [player, ...enemies],
 	},
@@ -31,12 +29,6 @@ export const EnemyAiSystem = (
 			return;
 		}
 
-		let willAttack = false;
-		if (Date.now() - lastAttackTime > 500) {
-			lastAttackTime = Date.now();
-			willAttack = true;
-		}
-
 		enemies.forEach((enemy) => {
 			const enemyPhysics = ecs.get(enemy, PhysicsComponent);
 			const enemySprite = ecs.get(enemy, AnimatedSpriteComponent);
@@ -44,7 +36,8 @@ export const EnemyAiSystem = (
 				return;
 			}
 
-			if (willAttack && Math.random() > 0.75) {
+			// TODO: implement a proper AI
+			if (Math.random() > 0.99) {
 				enemySprite.variant = SpriteVariant.ATTACKING;
 			}
 

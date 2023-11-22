@@ -1,33 +1,25 @@
 import { HealthComponent } from "../components/HealthComponent";
+import ScoreComponent, { updateHighscore } from "../components/ScoreComponent";
 import { ECS, Entity, System, SystemDefaults } from "../ecs";
 
-const HIGHSCORE_KEY = "highscore";
-
-let highscore: string = '0';
-try {
-	highscore = localStorage.getItem(HIGHSCORE_KEY) ?? '0'; 
-} catch(e) {}
 
 const scoreElement = document.querySelector<HTMLSpanElement>("#score");
 
-// TODO: move to an entity
-let score = 0;
-export const ScoreSystem = (ecs: ECS, player: Entity): System => ({
+export const ScoreSystem = (ecs: ECS, player: Entity, score: Entity): System => ({
 	...SystemDefaults,
-	msPerTick: 1000 / 60,
+	msPerTick: 1000 / 10,
 	query: {},
 	handler() {
-		if (!scoreElement) {
+		const scoreComponent = ecs.get(score, ScoreComponent);
+		const playerHealth = ecs.get(player, HealthComponent);
+		if (!scoreElement || !scoreComponent) {
 			return;
 		}
 
-		const playerHealth = ecs.get(player, HealthComponent);
 		if (playerHealth?.health) {
-			scoreElement.innerText = `${(++score).toString()} / ${highscore}`;
-		} else if(+score > +highscore) {
-			try {
-				localStorage.setItem(HIGHSCORE_KEY, score.toString());
-			} catch(e) {}
+			scoreElement.innerText = `${(++scoreComponent.score).toString()} / ${scoreComponent.highscore}`;
+		} else if(scoreComponent.score > +scoreComponent.highscore) {
+			updateHighscore(scoreComponent.score);
 		}
 	},
 });
